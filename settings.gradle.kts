@@ -20,6 +20,7 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "Helpers"
+include(":app")
+
 include(":lib")
-include(":UI")
 

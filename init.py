@@ -21,7 +21,7 @@ from shell import *
 class Files:
     AndroidManifest = "AndroidManifest.xml"
 
-    Lib = "Lib.kt"
+    MainActivity = "MainActivity.kt"
     AndroidTest = "ExampleInstrumentedTest.kt"
     Test = "ExampleUnitTest.kt"
     
@@ -36,11 +36,11 @@ class Files:
 
 
 class Paths:
-    LIB = "lib"
-    Main = make_path (LIB, "src/main")
+    APP = "app"
+    Main = make_path (APP, "src/main")
     SRC_Main = make_path (Main, "java")
-    SRC_AndroidTest =  make_path (LIB, "src/androidTest/java")
-    SRC_Test = make_path (LIB, "src/test/java")
+    SRC_AndroidTest =  make_path (APP, "src/androidTest/java")
+    SRC_Test = make_path (APP, "src/test/java")
     Values = make_path (Main, "res/values")
     ValuesNight = make_path (Main, "res/values-night")
 
@@ -59,8 +59,8 @@ class Messages:
 
 
 class Placeholders:
-    ProjectName = "BaseLibrary"
-    Package = "me.android.baselibrary"
+    ProjectName = "BaseApp"
+    Package = "me.android.baseapp"
 
     def __init__(self) -> None:
         pass
@@ -75,14 +75,14 @@ def abort ():
 
 
 def check_if_already_initialized () -> None:
-    if file_exists (make_path (Paths.SRC_Main, Files.Lib)):
+    if file_exists (make_path (Paths.SRC_Main, Files.MainActivity)):
         echo ("Android Project already initialized.")
         echo ()
         exit (1)
 
 
 def usage ():
-    echo ("Initializes this Android library project.")
+    echo ("Initializes this Android native project.")
     echo ("Usage: init <project package>")
     echo ("")
 
@@ -91,9 +91,9 @@ def init_project (project_package: str):
     project_name = basename (realpath ("."))
     project_package_dirtree = project_package.replace (".", "/")
 
-    lib_src = make_path (Paths.SRC_Main,
+    main_src = make_path (Paths.SRC_Main,
                           project_package_dirtree, 
-                          Files.Lib)
+                          Files.MainActivity)
     
     androidtest_src = make_path (Paths.SRC_AndroidTest, 
                                  project_package_dirtree, 
@@ -103,7 +103,7 @@ def init_project (project_package: str):
                           project_package_dirtree, 
                           Files.Test)
     
-    lib_build_settings = make_path (Paths.LIB, Files.GradleBuild)
+    app_build_settings = make_path (Paths.APP, Files.GradleBuild)
     
     project_manifest = make_path (Paths.Main, Files.AndroidManifest)
     project_settings = Files.GradleSettings
@@ -113,11 +113,11 @@ def init_project (project_package: str):
     themes_night_xml = make_path (Paths.ValuesNight, Files.Themes)
     
 
-    echo ("Ready for initialize Android library project")
-    echo ("--------------------------------------------")
-    echo_va ("Library name: $[0]", project_name)
+    echo ("Ready for initialize Android project")
+    echo ("------------------------------------")
+    echo_va ("Project name: $[0]", project_name)
     echo_va ("Package: $[0]", project_package)
-    echo ("--------------------------------------------")
+    echo ("------------------------------------")
 
     proceed = ask_if_continue ()
 
@@ -137,8 +137,8 @@ def init_project (project_package: str):
         echo (Messages.InitializationFailed)
         abort ()
 
-    if not mv (make_path (Paths.SRC_Main, Files.Lib), 
-               lib_src) \
+    if not mv (make_path (Paths.SRC_Main, Files.MainActivity), 
+               main_src) \
     or not mv (make_path (Paths.SRC_AndroidTest, Files.AndroidTest), 
                androidtest_src) \
     or not mv (make_path (Paths.SRC_Test, Files.Test), 
@@ -151,12 +151,12 @@ def init_project (project_package: str):
 
 
     echo_va ("Updating $[0], $[1] and $[2] ...", 
-             Files.Lib, 
+             Files.MainActivity, 
              Files.AndroidTest, 
              Files.Test)
 
     if not replace_all_in (Placeholders.Package, project_package, 
-                           lib_src) \
+                           main_src) \
     or not replace_all_in (Placeholders.Package, project_package, 
                            androidtest_src) \
     or not replace_all_in (Placeholders.Package, project_package,
@@ -177,7 +177,7 @@ def init_project (project_package: str):
                            project_settings) \
     or not replace_all_in (Placeholders.Package, 
                            project_package, 
-                           lib_build_settings):
+                           app_build_settings):
         echo (Messages.Failed)
         echo (Messages.InitializationFailed)
         abort ()
@@ -234,7 +234,7 @@ if __name__ == "__main__":
     if not DEBUGGING:
         argv = sys.argv
     else:
-        argv = (None, "me.arithesage.kotlin.android.testlib")
+        argv = (None, "me.arithesage.kotlin.android.testapp")
 
     argc = len (argv[1:])
 

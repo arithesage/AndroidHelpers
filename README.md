@@ -1,16 +1,16 @@
 # [WIP] Android helpers
 
-A collection of classes to make Android development more comfortable
+Convenience library to make Android development more comfortable
 (for me at least).
 
-The helpers are singletons because many times (if not all) you need to
-pass the current application context and doing this everytime you call
-a functions...
+The helpers are singletons (objects in Kotlin) because many times (if not all)
+you need to pass the current application context and doing this everytime you
+call a function...
 
-So, i decided to make them singletons.
+So, i decided making singletons.
 
 For example: If you want to show a Message, you first initialize the
-DialogsHelpers, passing the current application context.
+SimpleDialogs helper, located in the UIHelpers library, passing the current
+application context, and then you can use functions like ShowMessage.
 
-Now you access all the needed functions through DialogHelpers.Get(), and
-all of them will have access to the application context.
+
