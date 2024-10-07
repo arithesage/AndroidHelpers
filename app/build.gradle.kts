@@ -34,6 +34,9 @@ android {
 
 dependencies {
     implementation (project (":lib"))
+    implementation (project (":Serialization"))
+    implementation (project (":Utils"))
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
