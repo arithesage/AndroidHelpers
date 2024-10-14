@@ -23,7 +23,6 @@ rootProject.name = "Helpers"
 include(":app")
 
 include(":lib")
-
 include(":Serialization")
 include(":Utils")
 
