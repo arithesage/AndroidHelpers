@@ -7,7 +7,7 @@ import java.io.ByteArrayOutputStream
 import java.io.ObjectOutputStream
 
 object Serialize {
-    fun toBytes (obj: Object?) : ByteArray? {
+    fun toBytes (obj: Any?) : ByteArray? {
         if (obj == null) {
             return null
         }
@@ -28,7 +28,7 @@ object Serialize {
     }
 
 
-    fun toJSON (dict: HashMap<String, Object?>?) : String? {
+    fun toJSON (dict: HashMap<String, Any?>?) : String? {
         if (dict == null) {
             return null
         }

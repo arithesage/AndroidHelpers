@@ -1,11 +1,30 @@
 package me.arithesage.kotlin.helpers.utils
 
+import java.security.MessageDigest
+
+import me.arithesage.kotlin.android.helpers.utils.Utils
+import me.arithesage.kotlin.android.helpers.serialization.Serialize
+
+
 object Hashing {
-    fun SHA256 (obj:Object?): String? {
-        if (obj == null) {
-            return null
+    /**
+     * Obtain a SHA-256 hash from an object
+     */
+    fun SHA256 (obj: Any?): String {
+        var hash: String = ""
+
+        if (obj != null) {
+            val objBytes: ByteArray? = Serialize.toBytes (obj)
+
+            if (objBytes != null) {
+                val digest = MessageDigest.getInstance ("SHA-256").digest (
+                    objBytes
+                )
+                
+                hash = Utils.BytesToHex (digest)
+            }
         }
 
-        return null
+        return hash
     }
 }

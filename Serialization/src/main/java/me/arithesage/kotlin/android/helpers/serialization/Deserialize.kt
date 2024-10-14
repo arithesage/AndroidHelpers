@@ -5,7 +5,9 @@ import kotlinx.serialization.json.Json
 import java.io.ByteArrayInputStream
 import java.io.ObjectInput
 import java.io.ObjectInputStream
+import java.io.InvalidClassException
 
+@Suppress ("FINAL_UPPER_BOUND", "UNCHECKED_CAST")
 object Deserialize {
     fun <T: Serializable> fromBytes (byteArray: ByteArray?) : T? {
         if (byteArray == null) {
@@ -16,12 +18,18 @@ object Deserialize {
         val outChannel: ObjectInput
 
         outChannel = ObjectInputStream (inStream)
-        val obj: T = outChannel.readObject() as T
 
-        outChannel.close ()
-        inStream.close ()
+        try {
+            val obj: T = (outChannel.readObject() as T)
+            return obj
 
-        return obj
+        } catch (ex: InvalidClassException) {
+            return null
+            
+        } finally {
+            outChannel.close ()
+            inStream.close ()
+        }
     }
 
 
@@ -30,8 +38,13 @@ object Deserialize {
             return null
         }
 
-        val obj: T = Json.decodeFromString<T> (json)
-        return obj
+        try {
+            val obj: T = Json.decodeFromString<T> (json)
+            return obj
+
+        } catch (ex: InvalidClassException) {
+            return null
+        }
     }
 }
 
