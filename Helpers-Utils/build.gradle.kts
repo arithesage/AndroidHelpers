@@ -34,6 +34,7 @@ android {
 
 dependencies {
     implementation ( project (":Serialization"))
+    implementation ( project (":Scheduling"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)

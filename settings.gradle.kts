@@ -1,3 +1,7 @@
+import java.nio.file.Path
+import kotlin.io.path.Path
+import kotlin.io.path.pathString
+
 pluginManagement {
     repositories {
         google {
@@ -19,10 +23,29 @@ dependencyResolutionManagement {
     }
 }
 
+val projects: Path = Path (
+        System.getenv("HOME"),
+        "Proyectos",
+        "Propios",
+        "Android"
+)
+
+val wipProjects: Path = Path (
+        projects.toFile().absolutePath,
+        "_WIP"
+)
+
 rootProject.name = "Helpers"
 include(":app")
 
-include(":lib")
-include(":Serialization")
-include(":Utils")
+include (":lib")
+include (":Networking")
+include (":Serialization")
+include (":Scheduling")
+include (":Helpers-Utils")
 
+include (":UIHelpers")
+project (":UIHelpers").projectDir = File (
+        wipProjects.toFile(),
+        "UIHelpers/lib"
+)

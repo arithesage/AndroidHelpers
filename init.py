@@ -82,7 +82,7 @@ def check_if_already_initialized () -> None:
 
 
 def usage ():
-    echo ("Initializes this Android native project.")
+    echo ("Initializes this Android project.")
     echo ("Usage: init <project package>")
     echo ("")
 
