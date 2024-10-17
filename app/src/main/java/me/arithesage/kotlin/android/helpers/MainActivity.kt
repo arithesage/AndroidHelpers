@@ -24,9 +24,9 @@ class MainActivity : AppCompatActivity() {
         SimpleDialogs.Init (this)
         Networking.Init (this)
 
-        val ip: String = Networking.IP ()
+        //val ip: String = Networking.CurrentIPAddress ()
 
-        SimpleDialogs.ShowMessage (ip)
+        //SimpleDialogs.ShowMessage (ip)
 
         //SimpleDialogHelper.Init (this)
         //Requesters.Init (this)

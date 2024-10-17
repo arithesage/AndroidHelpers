@@ -2,5 +2,6 @@
 .idea/
 .kotlin/
 
+kls_database.db
 local.properties
 

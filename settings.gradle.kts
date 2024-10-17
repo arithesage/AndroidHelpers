@@ -42,6 +42,7 @@ include (":lib")
 include (":Networking")
 include (":Serialization")
 include (":Scheduling")
+include (":Threading")
 include (":Helpers-Utils")
 
 include (":UIHelpers")
@@ -49,3 +50,4 @@ project (":UIHelpers").projectDir = File (
         wipProjects.toFile(),
         "UIHelpers/lib"
 )
+

@@ -11,6 +11,10 @@ import java.net.Inet6Address
 import java.net.InetAddress
 import java.net.NetworkInterface
 
+import me.arithesage.kotlin.android.helpers.threading
+import me.arithesage.kotlin.android.helpers.threading.AsyncRunner
+import me.arithesage.kotlin.android.helpers.threading.Task
+
 
 object Networking {
     private var appContext: Context? = null
@@ -93,8 +97,8 @@ object Networking {
         var netInterface: NetworkInterface? = null
 
         try {
-            val socket: DatagramSocket = DatagramSocket()
-            socket.connect (InetAddress.getByName ("1.1.1.1"), 1000)
+            val socket = DatagramSocket()
+            socket.connect (InetAddress.getByName ("www.google.com"), 80)
 
             netInterface = NetworkInterface.getByInetAddress (
                     socket.localAddress
@@ -128,22 +132,50 @@ object Networking {
 
 
     @RequiresApi(Build.VERSION_CODES.M)
-    fun IP () : String {
-        if (!Initialized()) {
-            return ""
-        }
+    fun CurrentIPAddress () {
+        /*
+        if (Initialized()) {
+            if (Connected()) {
+                AsyncRunner.Do (
+                    Task (
+                        {
+                            try {
+                                val socket = DatagramSocket()
 
+                                socket.connect (
+                                    InetAddress.getByName ("www.google.com"),
+                                    80
+                                )
+
+                                ip = (socket.localAddress.hostAddress as String)
+
+                            } catch (ex: Exception) {
+                                //return ""
+                            }
+                        },
+                        null
+                    )
+                )
+            }
+        }*/
+
+
+        /*
         var ip = ""
 
         if (Connected()) {
-            val ipAddress = currentIPAddress()
+
+
+            /*
+            //val ipAddress = currentIPAddress()
 
             if (ipAddress != null) {
                 ip = ipAddress.ipv4
-            }
+            }*/
         }
 
         return ip
+        */
     }
 
 
