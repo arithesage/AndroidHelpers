@@ -1,4 +1,6 @@
-@file:Suppress("DEPRECATION", "FunctionName", "UNUSED")
+@file:Suppress("DEPRECATION", "FunctionName", "UNUSED", "MemberVisibilityCanBePrivate",
+    "MoveLambdaOutsideParentheses", "UnusedImport"
+)
 
 package me.arithesage.kotlin.android.helpers.networking
 
@@ -13,6 +15,7 @@ import java.net.Inet6Address
 
 import me.arithesage.kotlin.android.helpers.threading.AsyncRunner
 import me.arithesage.kotlin.android.helpers.threading.Task
+import java.net.NetworkInterface
 
 
 object Networking {
@@ -51,6 +54,35 @@ object Networking {
     }
 
 
+    fun CurrentIPAddress (onRetrieve: (IPAddress?) -> Unit) {
+        val netTask = Task (
+            {
+                val netInterface = MainNetInterface()
+
+                var ipv4: Inet4Address? = null
+                var ipv6: Inet6Address? = null
+
+                if (netInterface != null) {
+                    val inetAddresses = InetAddressesFrom (netInterface)
+
+                    for (address: InetAddress in inetAddresses) {
+                        if (address is Inet4Address) {
+                            ipv4 = address
+                        } else if (address is Inet6Address) {
+                            ipv6 = address
+                        }
+                    }
+
+                    onRetrieve (IPAddress (ipv4, ipv6))
+                }
+            }
+        )
+
+        AsyncRunner.Do (netTask)
+    }
+
+
+    /*
     fun CurrentIPAddress (onCheck: (IPAddress) -> Unit) {
         val netTask = Task (
             {
@@ -81,5 +113,84 @@ object Networking {
         )
 
         AsyncRunner.Do (netTask)
+    }*/
+
+
+    fun InetAddressesFrom (netInterface: NetworkInterface): Array<InetAddress> {
+        val inetAddresses = mutableListOf<InetAddress>()
+
+        val netInterfaceAddresses = netInterface.inetAddresses
+
+        while (netInterfaceAddresses.hasMoreElements()) {
+            val address = netInterfaceAddresses.nextElement()
+            inetAddresses.add (address)
+        }
+
+        return inetAddresses.toTypedArray()
+    }
+
+
+    fun Interfaces (): Array<NetworkInterface> {
+        val netInterfaces = mutableListOf<NetworkInterface>()
+        val interfaces = NetworkInterface.getNetworkInterfaces()
+
+        while (interfaces.hasMoreElements()) {
+            val netInterface = interfaces.nextElement()
+            netInterfaces.add (netInterface)
+        }
+
+        return netInterfaces.toTypedArray()
+    }
+
+
+    fun MainNetInterface (): NetworkInterface? {
+        val netInterfaces = Interfaces()
+
+        for (netInterface in netInterfaces) {
+            val inetAddresses = netInterface.inetAddresses
+
+            while (inetAddresses.hasMoreElements()) {
+                val inetAddress = inetAddresses.nextElement()
+
+                if (inetAddress.isSiteLocalAddress) {
+                    return netInterface
+                }
+            }
+        }
+
+        return null
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

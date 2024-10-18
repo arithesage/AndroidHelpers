@@ -1,3 +1,5 @@
+@file:Suppress("UnusedImport", "RedundantExplicitType")
+
 package me.arithesage.kotlin.android.helpers
 
 import android.os.Bundle
@@ -30,9 +32,12 @@ class MainActivity : AppCompatActivity() {
         var ip: String = ""
 
         Networking.CurrentIPAddress (
-            onCheck = {
-                ipAddress: IPAddress ->
-                ip = ipAddress.ipv4
+            onRetrieve = {
+                ipAddress: IPAddress? ->
+
+                if (ipAddress != null) {
+                    ip = ipAddress.ipv4
+                }
             }
         )
 
