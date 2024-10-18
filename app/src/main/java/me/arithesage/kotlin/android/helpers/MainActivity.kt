@@ -5,6 +5,9 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import me.arithesage.kotlin.android.helpers.networking.IPAddress
+
+import me.arithesage.kotlin.android.helpers.networking.Networking
 
 import me.arithesage.kotlin.android.helpers.ui.dialogs.Requesters
 import me.arithesage.kotlin.android.helpers.ui.dialogs.SimpleDialogs
@@ -23,6 +26,17 @@ class MainActivity : AppCompatActivity() {
 
         SimpleDialogs.Init (this)
         Networking.Init (this)
+
+        var ip: String = ""
+
+        Networking.CurrentIPAddress (
+            onCheck = {
+                ipAddress: IPAddress ->
+                ip = ipAddress.ipv4
+            }
+        )
+
+        SimpleDialogs.ShowMessage (ip)
 
         //val ip: String = Networking.CurrentIPAddress ()
 

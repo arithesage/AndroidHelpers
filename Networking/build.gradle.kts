@@ -30,7 +30,7 @@ android {
 }
 
 dependencies {
-    implementation (":Threading")
+    implementation (project (":Threading"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)

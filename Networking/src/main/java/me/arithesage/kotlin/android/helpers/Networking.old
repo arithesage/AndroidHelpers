@@ -11,12 +11,11 @@ import java.net.Inet6Address
 import java.net.InetAddress
 import java.net.NetworkInterface
 
-import me.arithesage.kotlin.android.helpers.threading
 import me.arithesage.kotlin.android.helpers.threading.AsyncRunner
 import me.arithesage.kotlin.android.helpers.threading.Task
 
 
-object Networking {
+object _old_Networking {
     private var appContext: Context? = null
     private var connectivityManager: ConnectivityManager? = null
 
