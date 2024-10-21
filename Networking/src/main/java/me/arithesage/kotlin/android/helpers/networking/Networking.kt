@@ -55,7 +55,7 @@ object Networking {
 
 
     fun CurrentIPAddress (onRetrieve: (IPAddress?) -> Unit) {
-        val netTask = Task (
+        AsyncRunner.Do (
             {
                 val netInterface = MainNetInterface()
 
@@ -77,8 +77,6 @@ object Networking {
                 }
             }
         )
-
-        AsyncRunner.Do (netTask)
     }
 
 
