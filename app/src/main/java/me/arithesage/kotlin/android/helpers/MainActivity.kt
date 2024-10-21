@@ -29,19 +29,26 @@ class MainActivity : AppCompatActivity() {
         SimpleDialogs.Init (this)
         Networking.Init (this)
 
-        var ip: String = ""
+        Networking.ExternalIPAddress (
+            onRetrieve = {
+                ipAddress: String ->
+                this.runOnUiThread { SimpleDialogs.ShowMessage (ipAddress) }
+            }
+        )
 
+        /*
         Networking.CurrentIPAddress (
             onRetrieve = {
                 ipAddress: IPAddress? ->
 
                 if (ipAddress != null) {
-                    ip = ipAddress.ipv4
+                    val ip = ipAddress.ipv4
+                    this.runOnUiThread { SimpleDialogs.ShowMessage(ip) }
                 }
             }
         )
+        */
 
-        SimpleDialogs.ShowMessage (ip)
 
         //val ip: String = Networking.CurrentIPAddress ()
 

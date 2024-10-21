@@ -1,8 +1,7 @@
-@file:Suppress("DEPRECATION", "FunctionName", "unused")
+@file:Suppress("FunctionName", "unused", "RedundantSamConstructor")
 
 package me.arithesage.kotlin.android.helpers.threading
 
-import android.os.AsyncTask
 import android.os.Debug
 
 

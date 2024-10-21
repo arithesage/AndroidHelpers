@@ -1,5 +1,5 @@
 @file:Suppress("DEPRECATION", "FunctionName", "UNUSED", "MemberVisibilityCanBePrivate",
-    "MoveLambdaOutsideParentheses", "UnusedImport"
+    "MoveLambdaOutsideParentheses", "UnusedImport", "IfThenToSafeAccess", "RedundantExplicitType"
 )
 
 package me.arithesage.kotlin.android.helpers.networking
@@ -14,8 +14,12 @@ import java.net.Inet4Address
 import java.net.Inet6Address
 
 import me.arithesage.kotlin.android.helpers.threading.AsyncRunner
-import me.arithesage.kotlin.android.helpers.threading.Task
+import java.io.IOException
+import java.io.InputStream
+
 import java.net.NetworkInterface
+import java.net.URL
+import java.util.Scanner
 
 
 object Networking {
@@ -80,38 +84,29 @@ object Networking {
     }
 
 
-    /*
-    fun CurrentIPAddress (onCheck: (IPAddress) -> Unit) {
-        val netTask = Task (
-            {
-                var inet4Address: Inet4Address? = null
-                var inet6Address: Inet6Address? = null
+    fun ExternalIPAddress (onRetrieve: (String) -> Unit) {
+        AsyncRunner.Do ({
+            var netStream: InputStream? = null
+            var ipAddress: String = ""
+            val ipifyURL = "https://api.ipify.org"
 
-                try {
-                    val socket = DatagramSocket ()
-                    socket.connect (InetAddress.getByName ("www.google.com"), 80)
-        
-                    val inetAddress: InetAddress = socket.localAddress
+            try {
+                netStream = URL (ipifyURL).openStream()
 
-                    if (inetAddress != null) {
-                        if (inetAddress is Inet4Address) {
-                            inet4Address = inetAddress
-    
-                        } else if (inetAddress is Inet6Address) {
-                            inet6Address = inetAddress
-                        }
-                    }
+                val streamReader = Scanner(netStream, "UTF-8")
+                ipAddress = streamReader.next()
 
-                    onCheck (IPAddress (inet4Address, inet6Address))
-        
-                } catch (ex: Exception) {
-        
+            } catch (_: IOException) {
+
+            } finally {
+                if (netStream != null) {
+                    netStream.close()
                 }
             }
-        )
 
-        AsyncRunner.Do (netTask)
-    }*/
+            onRetrieve (ipAddress)
+        })
+    }
 
 
     fun InetAddressesFrom (netInterface: NetworkInterface): Array<InetAddress> {
