@@ -9,10 +9,8 @@ import android.widget.LinearLayout
 
 class LoginUI (appContext: Context?) {
     private lateinit var ui: LinearLayout
-    //private lateinit var passwordFieldContainer: TextInputLayout
 
     private lateinit var _usernameField: EditText
-    //private lateinit var passwordField: EditText
     private lateinit var _passwordField: PasswordField
 
     init {

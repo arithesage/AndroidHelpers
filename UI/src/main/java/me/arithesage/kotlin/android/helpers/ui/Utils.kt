@@ -2,6 +2,7 @@
 
 package me.arithesage.kotlin.android.helpers.ui
 
+import android.os.Looper
 import android.view.View
 import android.view.ViewGroup
 
@@ -31,6 +32,14 @@ object Utils {
         }
 
         return visitedNodes
+    }
+
+
+    /**
+     * Returns if we are in the UI (main) thread
+     */
+    fun OnUIThread (): Boolean {
+        return (Looper.myLooper() == Looper.getMainLooper())
     }
 }
 

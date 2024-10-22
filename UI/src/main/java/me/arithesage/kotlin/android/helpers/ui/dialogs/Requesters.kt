@@ -8,11 +8,12 @@
     "UNUSED",
     "UNUSED_ANONYMOUS_PARAMETER",
     "UNUSED_PARAMETER",
-    "VARIABLE_WITH_REDUNDANT_INITIALIZER"
+    "VARIABLE_WITH_REDUNDANT_INITIALIZER", "MoveLambdaOutsideParentheses"
 )
 
 package me.arithesage.kotlin.android.helpers.ui.dialogs
 
+import android.app.Activity
 import android.content.Context
 import android.content.DialogInterface
 import android.text.InputType
@@ -21,6 +22,7 @@ import android.widget.LinearLayout
 import android.widget.LinearLayout.LayoutParams
 import androidx.appcompat.app.AlertDialog
 import androidx.constraintlayout.widget.ConstraintLayout
+import me.arithesage.kotlin.android.helpers.ui.Utils
 import me.arithesage.kotlin.android.helpers.ui.prefabs.LoginUI
 
 
@@ -294,7 +296,14 @@ class Requesters (private val context: Context) {
         )
 
         // Now is time for creating and showing our dialog
-        request.create().show ()
+        if (Utils.OnUIThread()) {
+            request.create().show ()
+
+        } else {
+            (context as Activity).runOnUiThread ({
+                request.create().show ()
+            })
+        }
     }
 
 
@@ -375,7 +384,14 @@ class Requesters (private val context: Context) {
                 }
         )
 
-        request.create().show ()
+        if (Utils.OnUIThread()) {
+            request.create().show ()
+
+        } else {
+            (context as Activity).runOnUiThread ({
+                request.create().show ()
+            })
+        }
     }
 }
 

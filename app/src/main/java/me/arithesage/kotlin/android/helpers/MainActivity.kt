@@ -3,6 +3,7 @@
 package me.arithesage.kotlin.android.helpers
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -29,15 +30,18 @@ class MainActivity : AppCompatActivity() {
         val dialogHelper = SimpleDialogs (this)
         val networkingHelper = Networking (this)
 
-        networkingHelper.ipAddress (
+        /*
+        networkingHelper.ipv4Address (
             onRetrieve = {
-                ip: IPAddress? ->
-
-                if (ip != null) {
-                    dialogHelper.showMessage (ip.ipv4)
-                }
+                ip: String ->
+                dialogHelper.showMessage (ip)
             }
         )
+        */
+
+        val netInterfaces = networkingHelper.interfaces()
+
+        Log.i ("NONE", "Finished")
     }
 }
 

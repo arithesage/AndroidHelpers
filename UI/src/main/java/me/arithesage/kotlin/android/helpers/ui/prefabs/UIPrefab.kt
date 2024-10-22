@@ -1,4 +1,4 @@
-@file:Suppress("MemberVisibilityCanBePrivate", "unused", "UNUSED_PARAMETER")
+@file:Suppress("MemberVisibilityCanBePrivate", "unused")
 
 package me.arithesage.kotlin.android.helpers.ui.prefabs
 
@@ -6,7 +6,7 @@ import android.content.Context
 import android.view.ViewGroup
 
 
-open abstract class UIPrefab<T:ViewGroup> (appContext: Context?) {
+abstract class UIPrefab<T:ViewGroup> (appContext: Context?) {
     protected lateinit var ui: T
 
     init {

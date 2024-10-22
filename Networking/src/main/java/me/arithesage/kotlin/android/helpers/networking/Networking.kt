@@ -1,5 +1,6 @@
 @file:Suppress("DEPRECATION", "FunctionName", "UNUSED", "MemberVisibilityCanBePrivate",
-    "MoveLambdaOutsideParentheses", "UnusedImport", "IfThenToSafeAccess", "RedundantExplicitType", "SpellCheckingInspection"
+    "MoveLambdaOutsideParentheses", "UnusedImport", "IfThenToSafeAccess", "RedundantExplicitType", "SpellCheckingInspection",
+    "JoinDeclarationAndAssignment"
 )
 
 package me.arithesage.kotlin.android.helpers.networking
@@ -13,6 +14,7 @@ import java.net.Inet4Address
 import java.net.Inet6Address
 
 import me.arithesage.kotlin.android.helpers.threading.AsyncRunner
+import me.arithesage.kotlin.android.helpers.ui.dialogs.SimpleDialogs
 import java.io.IOException
 import java.io.InputStream
 
@@ -26,7 +28,7 @@ import java.util.Scanner
  * Networking helper
  * @param context The activity where we are
  */
-class Networking (context: Context) {
+class Networking (private val context: Context) {
     private var connectivityManager: ConnectivityManager
 
     init {
@@ -48,9 +50,10 @@ class Networking (context: Context) {
 
     fun externalIPAddress (onRetrieve: (String) -> Unit) {
         AsyncRunner.Do ({
+            val ipifyURL = "https://api.ipify.org"
+
             var netStream: InputStream? = null
             var ipAddress: String = ""
-            val ipifyURL = "https://api.ipify.org"
 
             try {
                 netStream = URL (ipifyURL).openStream()
@@ -73,26 +76,45 @@ class Networking (context: Context) {
 
     fun ipAddress (onRetrieve: (IPAddress?) -> Unit) {
         AsyncRunner.Do (
-                {
-                    val netInterface = mainNetInterface()
+            {
+                val netInterface = mainNetInterface()
 
-                    var ipv4: Inet4Address? = null
-                    var ipv6: Inet6Address? = null
+                var ipv4: Inet4Address? = null
+                var ipv6: Inet6Address? = null
 
-                    if (netInterface != null) {
-                        val inetAddresses = inetAddressesFrom (netInterface)
+                if (netInterface != null) {
+                    val inetAddresses = inetAddressesFrom (netInterface)
 
-                        for (address: InetAddress in inetAddresses) {
-                            if (address is Inet4Address) {
-                                ipv4 = address
-                            } else if (address is Inet6Address) {
-                                ipv6 = address
-                            }
+                    for (address: InetAddress in inetAddresses) {
+                        if (address is Inet4Address) {
+                            ipv4 = address
+                        } else if (address is Inet6Address) {
+                            ipv6 = address
                         }
-
-                        onRetrieve (IPAddress (ipv4, ipv6))
                     }
+
+                    onRetrieve (IPAddress (ipv4, ipv6))
                 }
+            }
+        )
+    }
+
+
+    /**
+     * Returns your IP address.
+     *
+     * This is quickest and simplest method for obtaining it.
+     * You can also call the other function of same name that returns
+     * an IPAddress object, that contains both your IPv4 and IPv6 addresses.
+     */
+    fun ipv4Address (onRetrieve: (String) -> Unit)  {
+        webConnect (
+            "github.com",
+            onConnect = {
+                    socket ->
+                onRetrieve (socket.inetAddress.hostAddress as String)
+                socket.close ()
+            }
         )
     }
 
@@ -143,17 +165,15 @@ class Networking (context: Context) {
     }
 
 
-    fun mainInterfaceName (onRetrieve: (String) -> Unit)  {
-        webConnect (
-                "http://www.google.com",
-                onConnect = {
-                    socket ->
-                    //socket.inetAddress.
-                }
-        )
-    }
-
-
+    /**
+     * Open a connection to a server
+     *
+     * @param address Server address (IP or URL)
+     * @param port Port to connect
+     *
+     * @param onConnect What to do on connection.
+     * Provides the connected socket
+     */
     fun connectTo (address: String,
                    port: Int,
                    onConnect: (Socket) -> Unit)
@@ -165,13 +185,16 @@ class Networking (context: Context) {
                 connection = Socket(address, port)
                 onConnect (connection as Socket)
 
-            } catch (_: Exception) {
-
+            } catch (ex: Exception) {
+                SimpleDialogs (context).showMessage("Exception: " + ex.message)
             }
         }
     }
 
 
+    /**
+     * Do the same as 'connectTo', but defaults the port to 80
+     */
     fun webConnect (url: String,
                     onConnect: (Socket) -> Unit)
     {

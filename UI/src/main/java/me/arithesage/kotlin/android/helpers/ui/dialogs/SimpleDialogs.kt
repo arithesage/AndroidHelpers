@@ -7,14 +7,16 @@
     "RemoveEmptyParenthesesFromLambdaCall",
         "UNUSED",
     "UNUSED_ANONYMOUS_PARAMETER",
-    "UNUSED_PARAMETER"
+    "UNUSED_PARAMETER", "MoveLambdaOutsideParentheses"
 )
 
 package me.arithesage.kotlin.android.helpers.ui.dialogs
 
+import android.app.Activity
 import android.content.Context
 import android.content.DialogInterface
 import androidx.appcompat.app.AlertDialog
+import me.arithesage.kotlin.android.helpers.ui.Utils
 
 
 /**
@@ -70,7 +72,14 @@ class SimpleDialogs (private val context: Context) {
             }
         )
 
-        dialog.show ()
+        if (Utils.OnUIThread()) {
+            dialog.create().show()
+
+        } else {
+            (context as Activity).runOnUiThread ({
+                dialog.create().show()
+            })
+        }
     }
 }
 
