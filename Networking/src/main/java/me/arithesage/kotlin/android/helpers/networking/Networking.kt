@@ -1,5 +1,5 @@
 @file:Suppress("DEPRECATION", "FunctionName", "UNUSED", "MemberVisibilityCanBePrivate",
-    "MoveLambdaOutsideParentheses", "UnusedImport", "IfThenToSafeAccess", "RedundantExplicitType"
+    "MoveLambdaOutsideParentheses", "UnusedImport", "IfThenToSafeAccess", "RedundantExplicitType", "SpellCheckingInspection"
 )
 
 package me.arithesage.kotlin.android.helpers.networking
@@ -8,7 +8,6 @@ import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkInfo
 
-import java.net.DatagramSocket
 import java.net.InetAddress
 import java.net.Inet4Address
 import java.net.Inet6Address
@@ -18,73 +17,36 @@ import java.io.IOException
 import java.io.InputStream
 
 import java.net.NetworkInterface
+import java.net.Socket
 import java.net.URL
 import java.util.Scanner
 
 
-object Networking {
-    private var appContext: Context? = null
-    private var connectivityManager: ConnectivityManager? = null
+/**
+ * Networking helper
+ * @param context The activity where we are
+ */
+class Networking (context: Context) {
+    private var connectivityManager: ConnectivityManager
 
-    fun Init (appContext: Context) {
-        this.appContext = appContext
-
-        this.connectivityManager = appContext.getSystemService (
+    init {
+        connectivityManager = context.getSystemService (
                 Context.CONNECTIVITY_SERVICE
         ) as ConnectivityManager
     }
 
 
-    fun Initialized (): Boolean {
-        return (appContext != null)
+    fun connected () : Boolean {
+        return (currentNetworkState() == NetworkInfo.State.CONNECTED)
     }
 
 
-    fun Connected () : Boolean {
-        if (!Initialized()) {
-            return false
-        }
-
-        return (CurrentNetworkState() == NetworkInfo.State.CONNECTED)
+    fun currentNetworkState () : NetworkInfo.State? {
+        return connectivityManager.activeNetworkInfo?.state
     }
 
 
-    fun CurrentNetworkState () : NetworkInfo.State? {
-        if (!Initialized()) {
-            return null
-        }
-
-        return connectivityManager?.activeNetworkInfo?.state
-    }
-
-
-    fun CurrentIPAddress (onRetrieve: (IPAddress?) -> Unit) {
-        AsyncRunner.Do (
-            {
-                val netInterface = MainNetInterface()
-
-                var ipv4: Inet4Address? = null
-                var ipv6: Inet6Address? = null
-
-                if (netInterface != null) {
-                    val inetAddresses = InetAddressesFrom (netInterface)
-
-                    for (address: InetAddress in inetAddresses) {
-                        if (address is Inet4Address) {
-                            ipv4 = address
-                        } else if (address is Inet6Address) {
-                            ipv6 = address
-                        }
-                    }
-
-                    onRetrieve (IPAddress (ipv4, ipv6))
-                }
-            }
-        )
-    }
-
-
-    fun ExternalIPAddress (onRetrieve: (String) -> Unit) {
+    fun externalIPAddress (onRetrieve: (String) -> Unit) {
         AsyncRunner.Do ({
             var netStream: InputStream? = null
             var ipAddress: String = ""
@@ -109,7 +71,33 @@ object Networking {
     }
 
 
-    fun InetAddressesFrom (netInterface: NetworkInterface): Array<InetAddress> {
+    fun ipAddress (onRetrieve: (IPAddress?) -> Unit) {
+        AsyncRunner.Do (
+                {
+                    val netInterface = mainNetInterface()
+
+                    var ipv4: Inet4Address? = null
+                    var ipv6: Inet6Address? = null
+
+                    if (netInterface != null) {
+                        val inetAddresses = inetAddressesFrom (netInterface)
+
+                        for (address: InetAddress in inetAddresses) {
+                            if (address is Inet4Address) {
+                                ipv4 = address
+                            } else if (address is Inet6Address) {
+                                ipv6 = address
+                            }
+                        }
+
+                        onRetrieve (IPAddress (ipv4, ipv6))
+                    }
+                }
+        )
+    }
+
+
+    fun inetAddressesFrom (netInterface: NetworkInterface): Array<InetAddress> {
         val inetAddresses = mutableListOf<InetAddress>()
 
         val netInterfaceAddresses = netInterface.inetAddresses
@@ -123,7 +111,7 @@ object Networking {
     }
 
 
-    fun Interfaces (): Array<NetworkInterface> {
+    fun interfaces (): Array<NetworkInterface> {
         val netInterfaces = mutableListOf<NetworkInterface>()
         val interfaces = NetworkInterface.getNetworkInterfaces()
 
@@ -136,8 +124,8 @@ object Networking {
     }
 
 
-    fun MainNetInterface (): NetworkInterface? {
-        val netInterfaces = Interfaces()
+    fun mainNetInterface (): NetworkInterface? {
+        val netInterfaces = interfaces()
 
         for (netInterface in netInterfaces) {
             val inetAddresses = netInterface.inetAddresses
@@ -152,6 +140,45 @@ object Networking {
         }
 
         return null
+    }
+
+
+    fun mainInterfaceName (onRetrieve: (String) -> Unit)  {
+        webConnect (
+                "http://www.google.com",
+                onConnect = {
+                    socket ->
+                    //socket.inetAddress.
+                }
+        )
+    }
+
+
+    fun connectTo (address: String,
+                   port: Int,
+                   onConnect: (Socket) -> Unit)
+    {
+        AsyncRunner.Do {
+            var connection: Socket? = null
+
+            try {
+                connection = Socket(address, port)
+                onConnect (connection as Socket)
+
+            } catch (_: Exception) {
+
+            }
+        }
+    }
+
+
+    fun webConnect (url: String,
+                    onConnect: (Socket) -> Unit)
+    {
+        connectTo (url,80, onConnect = {
+            socket ->
+            onConnect (socket)
+        })
     }
 }
 

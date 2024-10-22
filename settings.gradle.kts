@@ -37,17 +37,19 @@ val wipProjects: Path = Path (
 
 rootProject.name = "Helpers"
 include(":app")
-
 include (":lib")
+
 include (":Networking")
 include (":Serialization")
 include (":Scheduling")
 include (":Threading")
 include (":Helpers-Utils")
+include (":UI")
 
+/*
 include (":UIHelpers")
 project (":UIHelpers").projectDir = File (
         wipProjects.toFile(),
         "UIHelpers/lib"
 )
-
+*/

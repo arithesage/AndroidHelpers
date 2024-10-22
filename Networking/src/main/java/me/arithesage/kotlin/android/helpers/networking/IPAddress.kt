@@ -1,3 +1,5 @@
+@file:Suppress("unused", "MemberVisibilityCanBePrivate")
+
 package me.arithesage.kotlin.android.helpers.networking
 
 import java.net.Inet4Address
@@ -10,11 +12,11 @@ class IPAddress (inetIPv4: Inet4Address?, inetIPv6: Inet6Address?) {
 
     init {
         if (inetIPv4 != null) {
-            ipv4 = inetIPv4.hostAddress
+            ipv4 = inetIPv4.hostAddress!!
         }
 
         if (inetIPv6 != null) {
-            ipv6 = inetIPv6.hostAddress
+            ipv6 = inetIPv6.hostAddress!!
         }
     }
 

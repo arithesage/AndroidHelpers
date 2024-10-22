@@ -9,7 +9,7 @@ android {
 
     defaultConfig {
         applicationId = "me.arithesage.kotlin.android.helpers"
-        minSdk = 23
+        minSdk = 24
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
@@ -44,7 +44,8 @@ dependencies {
     implementation (project (":Serialization"))
     implementation (project (":Helpers-Utils"))
 
-    implementation (project (":UIHelpers"))
+    implementation (project (":UI"))
+    //implementation (project (":UIHelpers"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)

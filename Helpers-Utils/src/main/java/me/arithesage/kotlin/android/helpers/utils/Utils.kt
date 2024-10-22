@@ -1,6 +1,6 @@
-package me.arithesage.kotlin.android.helpers.utils
+@file:Suppress("FunctionName")
 
-import android.os.Looper
+package me.arithesage.kotlin.android.helpers.utils
 
 
 object Utils {

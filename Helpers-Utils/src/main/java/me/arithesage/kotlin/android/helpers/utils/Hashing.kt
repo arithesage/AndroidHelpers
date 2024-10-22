@@ -1,8 +1,9 @@
-package me.arithesage.kotlin.helpers.utils
+@file:Suppress("RedundantExplicitType", "unused", "FunctionName")
+
+package me.arithesage.kotlin.android.helpers.utils
 
 import java.security.MessageDigest
 
-import me.arithesage.kotlin.android.helpers.utils.Utils
 import me.arithesage.kotlin.android.helpers.serialization.Serialize
 
 

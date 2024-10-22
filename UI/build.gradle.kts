@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "me.arithesage.kotlin.android.helpers"
+    namespace = "me.arithesage.kotlin.android.helpers.ui"
     compileSdk = 34
 
     defaultConfig {
@@ -17,7 +17,11 @@ android {
     buildTypes {
         release {
             isMinifyEnabled = false
-            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            
+            proguardFiles(getDefaultProguardFile(
+                "proguard-android-optimize.txt"), 
+                "proguard-rules.pro"
+            )
         }
     }
     compileOptions {
@@ -30,12 +34,11 @@ android {
 }
 
 dependencies {
-    implementation (project (":Threading"))
+    implementation (project (":Helpers-Utils"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
-    implementation(project(":Threading"))
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

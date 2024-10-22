@@ -1,10 +1,12 @@
+@file:Suppress("unused")
+
 package me.arithesage.kotlin.android.helpers.serialization
 
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
-import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import java.io.ObjectOutputStream
+
 
 object Serialize {
     fun toBytes (obj: Any?) : ByteArray? {
@@ -13,9 +15,8 @@ object Serialize {
         }
 
         val outStream = ByteArrayOutputStream ()
-        val objInput: ObjectOutputStream
+        val objInput = ObjectOutputStream (outStream)
 
-        objInput = ObjectOutputStream (outStream)
         objInput.writeObject (obj)
         objInput.flush ()
 
