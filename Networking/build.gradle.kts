@@ -30,9 +30,6 @@ android {
 }
 
 dependencies {
-    implementation (project (":Threading"))
-    implementation (project (":UI"))
-
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
@@ -40,4 +37,9 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+
+    implementation ("com.jcraft:jsch:0.1.55")
+
+    implementation (project (":Threading"))
+    implementation (project (":UI"))
 }
