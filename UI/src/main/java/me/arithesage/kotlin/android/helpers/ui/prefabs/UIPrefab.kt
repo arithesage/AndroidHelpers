@@ -14,10 +14,19 @@ abstract class UIPrefab<T:ViewGroup> (protected val context: Context) {
     }
 
 
-    protected open abstract fun setup ()
+    protected abstract fun setup ()
 
 
     fun ui (): T {
         return ui
+    }
+
+
+    /**
+     * Set your prefab default layout params here if any.
+     * Remember adding 'ui.invalidate ()'
+     */
+    open fun updateLayout () {
+
     }
 }

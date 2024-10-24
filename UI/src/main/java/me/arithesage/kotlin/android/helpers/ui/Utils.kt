@@ -1,10 +1,15 @@
-@file:Suppress("unused", "FunctionName")
+@file:Suppress("unused", "FunctionName", "VARIABLE_WITH_REDUNDANT_INITIALIZER",
+    "LiftReturnOrAssignment"
+)
 
 package me.arithesage.kotlin.android.helpers.ui
 
 import android.os.Looper
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewGroup.LayoutParams
+import androidx.appcompat.widget.LinearLayoutCompat
+import androidx.constraintlayout.widget.ConstraintLayout
 
 
 object Utils {
@@ -40,6 +45,36 @@ object Utils {
      */
     fun OnUIThread (): Boolean {
         return (Looper.myLooper() == Looper.getMainLooper())
+    }
+
+
+    fun SetViewSize (view: View?, width: Int, height: Int) {
+        if (view != null) {
+            val viewContainer = view.parent
+            var layoutParams: LayoutParams? = null
+
+            when (viewContainer){
+                is ConstraintLayout -> {
+                    layoutParams = view.layoutParams as
+                            ConstraintLayout.LayoutParams
+                }
+
+                is LinearLayoutCompat -> {
+                    layoutParams = view.layoutParams as
+                            LinearLayoutCompat.LayoutParams
+                }
+
+                else -> {
+                    return
+                }
+            }
+
+            layoutParams.width = width
+            layoutParams.height = height
+            view.layoutParams = layoutParams
+
+            view.invalidate()
+        }
     }
 }
 
