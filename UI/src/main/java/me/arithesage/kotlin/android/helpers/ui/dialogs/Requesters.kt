@@ -18,10 +18,11 @@ import android.content.Context
 import android.content.DialogInterface
 import android.text.InputType
 import android.widget.EditText
-import android.widget.LinearLayout
-import android.widget.LinearLayout.LayoutParams
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.widget.LinearLayoutCompat
+import androidx.appcompat.widget.LinearLayoutCompat.LayoutParams
 import androidx.constraintlayout.widget.ConstraintLayout
+
 import me.arithesage.kotlin.android.helpers.ui.Utils
 import me.arithesage.kotlin.android.helpers.ui.prefabs.LoginUI
 
@@ -172,8 +173,8 @@ class Requesters (private val context: Context) {
         //
         // This is a very simple layout:
         // Each view will be placed below the previous one.
-        val ui = LinearLayout (context)
-        ui.orientation = LinearLayout.VERTICAL
+        val ui = LinearLayoutCompat (context)
+        ui.orientation = LinearLayoutCompat.VERTICAL
 
         var inputField: EditText? = null
 
@@ -325,14 +326,14 @@ class Requesters (private val context: Context) {
      */
     fun CustomRequest (requesterTitle: String?,
                        requesterCaption: String?,
-                       ui: LinearLayout,
+                       ui: LinearLayoutCompat,
                        onAccept: () -> Unit,
                        uiLayoutParams: LayoutParams?)
     {
         val request = AlertDialog.Builder (context)
         val uiContainer = ConstraintLayout (context)
 
-        ui.orientation = LinearLayout.VERTICAL
+        ui.orientation = LinearLayoutCompat.VERTICAL
         uiContainer.addView (ui)
         request.setView (uiContainer)
 

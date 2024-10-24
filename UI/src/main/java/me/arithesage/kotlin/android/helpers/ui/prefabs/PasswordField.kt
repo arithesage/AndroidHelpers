@@ -6,25 +6,27 @@ import android.content.Context
 import android.text.InputType.TYPE_CLASS_TEXT
 import android.text.InputType.TYPE_TEXT_VARIATION_PASSWORD
 import android.widget.EditText
-import android.widget.LinearLayout
+import androidx.appcompat.widget.LinearLayoutCompat
 import com.google.android.material.textfield.TextInputLayout
+
 import me.arithesage.kotlin.android.helpers.utils.Hashing
 
-class PasswordField (appContext: Context?)
-    : UIPrefab<LinearLayout>(appContext)
+
+class PasswordField (context: Context)
+    : UIPrefab<LinearLayoutCompat>(context)
 {
         private lateinit var passwordField: EditText
         private lateinit var passwordFieldContainer: TextInputLayout
 
-        override fun setup(appContext: Context) {
-            ui = LinearLayout (appContext)
+        override fun setup () {
+            ui = LinearLayoutCompat (context)
 
             // We use a TextInputLayout to wrap the passwordField
             // because doing things this way will automatically add a
             // 'eye' button to allow seeing the entered password.
-            passwordFieldContainer = TextInputLayout (appContext)
+            passwordFieldContainer = TextInputLayout (context)
 
-            passwordField = EditText (appContext)
+            passwordField = EditText (context)
             passwordField.hint = "Password"
             passwordField.id = (0..Int.MAX_VALUE).random()
             passwordField.maxLines = 1
@@ -42,7 +44,7 @@ class PasswordField (appContext: Context?)
 
             val passwordContainerParams = passwordFieldContainer.layoutParams
             passwordContainerParams.width =
-                    LinearLayout.LayoutParams.MATCH_PARENT
+                    LinearLayoutCompat.LayoutParams.MATCH_PARENT
             passwordFieldContainer.layoutParams = passwordContainerParams
         }
 

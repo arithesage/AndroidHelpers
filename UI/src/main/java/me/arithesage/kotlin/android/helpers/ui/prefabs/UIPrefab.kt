@@ -6,17 +6,15 @@ import android.content.Context
 import android.view.ViewGroup
 
 
-abstract class UIPrefab<T:ViewGroup> (appContext: Context?) {
+abstract class UIPrefab<T:ViewGroup> (protected val context: Context) {
     protected lateinit var ui: T
 
     init {
-        if (appContext != null) {
-            setup (appContext)
-        }
+        setup ()
     }
 
 
-    protected open abstract fun setup (appContext: Context)
+    protected open abstract fun setup ()
 
 
     fun ui (): T {

@@ -1,33 +1,50 @@
-@file:Suppress("FunctionName", "unused" , "UNUSED_ANONYMOUS_PARAMETER")
+@file:Suppress("FunctionName", "unused")
 
 package me.arithesage.kotlin.android.helpers.ui.prefabs
 
 import android.content.Context
 import android.widget.EditText
 import android.widget.LinearLayout
+import androidx.appcompat.widget.LinearLayoutCompat
 
 
-class LoginUI (appContext: Context?) {
-    private lateinit var ui: LinearLayout
-
+class LoginUI (context: Context) : UIPrefab<LinearLayoutCompat>(context) {
     private lateinit var _usernameField: EditText
     private lateinit var _passwordField: PasswordField
 
-    init {
-        if (appContext != null) {
-            ui = LinearLayout(appContext)
+    override fun setup() {
+        ui = LinearLayoutCompat (context)
 
+        _usernameField = EditText (context)
+        _usernameField.hint = "Username"
+        _usernameField.id = (0..Int.MAX_VALUE).random()
+        _usernameField.maxLines = 1
+
+        _passwordField = PasswordField (context)
+
+        ui.addView (_usernameField)
+        ui.addView (_passwordField.ui())
+
+        val passwordFieldParams = _passwordField.ui().layoutParams
+        passwordFieldParams.width =
+                LinearLayout.LayoutParams.MATCH_PARENT
+        _passwordField.ui().layoutParams = passwordFieldParams
+
+
+        val usernameFieldLayoutParams = _usernameField.layoutParams
+        usernameFieldLayoutParams.width =
+                LinearLayout.LayoutParams.MATCH_PARENT
+        _usernameField.layoutParams = usernameFieldLayoutParams
+    }
+
+    /*
+    init {
+        if (context != null) {
             // We use a TextInputLayout to wrap the passwordField
             // because doing things this way will automatically add a
             // 'eye' button to allow seeing the entered password.
             //passwordFieldContainer = TextInputLayout (appContext)
 
-            _usernameField = EditText (appContext)
-            _usernameField.hint = "Username"
-            _usernameField.id = (0..Int.MAX_VALUE).random()
-            _usernameField.maxLines = 1
-
-            _passwordField = PasswordField (appContext)
             /*
             passwordField = EditText (appContext)
             passwordField.hint = "Password"
@@ -42,8 +59,6 @@ class LoginUI (appContext: Context?) {
                 TextInputLayout.END_ICON_PASSWORD_TOGGLE
             */
 
-            ui.addView (_usernameField)
-            ui.addView (_passwordField.ui())
             //ui.addView (passwordFieldContainer)
 
             // Adjust both password field container and username field to
@@ -55,19 +70,9 @@ class LoginUI (appContext: Context?) {
                 LinearLayout.LayoutParams.MATCH_PARENT
             passwordFieldContainer.layoutParams = passwordContainerParams
             */
-
-            val passwordFieldParams = _passwordField.ui().layoutParams
-            passwordFieldParams.width =
-                    LinearLayout.LayoutParams.MATCH_PARENT
-            _passwordField.ui().layoutParams = passwordFieldParams
-
-
-            val usernameFieldLayoutParams = _usernameField.layoutParams
-            usernameFieldLayoutParams.width = 
-                LinearLayout.LayoutParams.MATCH_PARENT
-            _usernameField.layoutParams = usernameFieldLayoutParams
         }
     }
+    */
 
 
     /**
@@ -114,6 +119,7 @@ class LoginUI (appContext: Context?) {
     }
     */
 
+    /*
     /**
      * Returns the built UI.
      * Use this to integrate it in an Activity or another View.
@@ -121,6 +127,7 @@ class LoginUI (appContext: Context?) {
     fun ui () : LinearLayout {
         return ui
     }
+    */
 
 
     fun username (): String {
